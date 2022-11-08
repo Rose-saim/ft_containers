@@ -1,20 +1,27 @@
-#include "vector.hpp"
+#include <iostream>
+#include "map.hpp"
 
-int main()
+bool fncomp (char lhs, char rhs) {return lhs<rhs;}
+
+struct classcomp {
+  bool operator() (const char& lhs, const char& rhs) const
+  {return lhs<rhs;}
+};
+
+int main ()
 {
-	vector<int> v;
-	vector<int> ran;
+  ft::map<char,int> first;
 
-	for (int i = 0; i < 10; i++)
-	{	
-		v.push_back(i);
-	}
-	std::cout << "====PRINT_LIST_CREAT====" << std::endl;
-	v.print();
-	v.pop_back();
-	std::cout << "====PRINT_POP_LAST_VALUE====" << std::endl;
-	v.print();
-	std::cout << "====PRINT_FIRST_VALUE====" << std::endl;
-	std::cout << v.begin() << std::endl;
-	std::cout << "====PRINT_LAST_VALUE====" << std::endl;
+  // first['a']=10;
+  // first['b']=30;
+  // first['c']=50;
+  // first['d']=70;
+
+  // ft::map<char,int> second (first.begin(),first.end());
+
+  // ft::map<char,int> third (second);
+
+  // ft::map<char,int,classcomp> fourth;                 // class as Compare
+  // std::cout << first['a'] << std::endl;
+  return 0;
 }
