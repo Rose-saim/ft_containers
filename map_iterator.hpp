@@ -7,11 +7,19 @@
 
 namespace ft
 {
-	template<class Key, class T, class Compare = std::less<Key>>
+	template<class Key, class T, class Compare = std::less<Key>	>
 	class map_iterator
 	{
 		private:
-			typedef ft::node<Key, T>	node;
+			typedef ft::pair<const Key, T>	value_type;
+			typedef long int				node;
+			typedef size_t					size_type;
+
+			typedef value_type&										reference;
+			typedef value_typ*										pointer;
+			typedef node*											nodePtr;
+		private:
+			nodePtr		_node;
 		public:
 
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -19,65 +27,102 @@ namespace ft
 		/***********************************************************CONSTRUCTOR***********************************************************/
 		/********************************************************************************************************************************/
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			map_iterator(): _node(NULL), _isend(false){};
-			map_iterator(const map_iterator<const Key, T, Compare> &other): _node(other.getNode()), _isend(other.getEnd()){};
+			map_iterator(): _node(NULL) {};
+			map_iterator(const map_iterator<const Key, T, Compare> &other)
+			{
+				*this = other;
+			}
 			~map_iterator(){};
 
+			map_iterator &operator=( const map_iterator &other)
+			{
+				if (&other == this)
+				{
+					this->_node = other->_node;
+					this->_lastElem = other->_lastElem;
+					this->_comp = other->_isend;
+				}
+				return (*this); 
+			}
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/********************************************************************************************************************************/
 		/************************************************************GET VALUE***********************************************************/
 		/********************************************************************************************************************************/
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
-			node	*getNode( void ) const { return _node; }
-			bool	isEnd( void ) const { return _isend; }
-
-
+		
 			node	TreeMinimum(node root)
 			{
-				node*	hisParent;
-
 				while (!root->leftChild->isNil())
 				{
 					root = root->left;
 				}
 				return (root);
 			}
+
+			node	TreeMaximum(node root)
+			{
+				while (!root->leftChild->isNil())
+				{
+					root = root->right;
+				}
+				return (root);
+			}
+
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/********************************************************************************************************************************/
 		/************************************************************OVERLOAD************************************************************/
 		/********************************************************************************************************************************/
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			// map_iterator &operator=( const map_iterator<const Key, T, Compare> &other)
-			// {
-			// 	if (&other == this)
-			// 		return (*this);
-			// 	this->_node = other->_node;
-			// 	this->_isend = other->_isend;
-			// 	return (*this); 
-			// }
-			// friend bool &operator==( const map_iterator &lhs, const map_iterator &rhs)
-			// {
-			// 	if (lhs._isend != rhs._isend)
-			// 		return false;
-			// 	else if (lsh._isend == true)
-			// 		return true;
-			// 	return (lsh._node == rhs._node);
-			// }
-			// friend bool &operator!=( const map_iterator &lhs, const map_iterator &rhs)
-			// {
-			// 	if (lhs._isend != rhs._isend)
-			// 		return false;
-			// 	else if (lsh._isend == true)
-			// 		return true;
-			// 	return (lsh._node != rhs._node);
-			// }
-			// map_iterator operator++(int)
-			// map_iterator operator--(int)
-			// map_iterator &operator++()
-			// map_iterator &operator--()
-		private:
-			node	*_node;
-			bool 	_isend;
+		
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		/********************************************************************************************************************************/
+		/************************************************************OVERLOAD************************************************************/
+		/********************************************************************************************************************************/
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			map_iterator &operator=()
+			{
+				if (this != &other)
+					_node = other._node;
+				return (*this);
+			}
+			map_iterator &operator++()
+			{
+				_node = _node->next();
+				return (*this);
+			}
+			map_iterator &operator--()
+			{
+				_node = _node->prev();
+				return (*this);
+			}
+			map_iterator operator++(int)
+			{
+				map_iterator	tmp = *this;
+				_node = _node->next();
+				return (tmp);
+			}
+			map_iterator operator--(int)
+			{
+				map_iterator	tmp = *this;
+				_node = _node->prev();
+				return (tmp);
+			}
+			friend bool operator==(const map_iterator &it) const
+			{
+				return (it._node == _node);
+			}
+			friend bool &operator!=( const map_iterator &it) const
+			{
+				return (it._node != _node);
+			}
+			map_iterator &operator*(const map_iterator	&other) const
+			{
+				return (_node->value);
+			}
+			map_iterator &operator->() const
+			{
+				return (&_node->value);
+			}
 	};
 }
 
