@@ -10,7 +10,7 @@
 #include <exception>
 #include <memory>
 #include "pair.hpp"
-#include "map_iterator.hpp"
+#include "node.hpp"
 
 
 namespace ft
@@ -33,7 +33,6 @@ namespace ft
 			typedef	T												mapped_type;
 			typedef	ft::pair<const Key, T>			 				value_type;
 			typedef	size_t											size_type;
-			typedef	ptrdiff_t										diffrence_type;	
 			typedef	Compare											key_compare;
 			typedef	Allocator										allocator_type;
 			typedef	typename allocator_type::reference				reference;
@@ -56,14 +55,14 @@ namespace ft
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 			explicit map( const key_compare &cmp = key_compare(), const Allocator &alloc = Allocator() ):
-				_compare(NULL), _compare(NULL), _alloc(NULL), _size(0), _root(NULL), _end(NULL), _rend(NULL)
+				_compare(cmp), _alloc(alloc), _size(0), _root(NULL), _end(NULL), _rend(NULL)
 			{
 				std::cout << "Construct map" << std::endl;
 			}
 			template< typename InputIt >
 			map( InputIt first, InputIt last, const key_compare &cmp = key_compare(),
 					const Allocator &alloc = Allocator() ):
-				_comparator(cmp), _valueAlloc(alloc)
+				_compare(cmp), _valueAlloc(alloc)
 			{
 				this->insert(first, last);
 			}
@@ -128,21 +127,21 @@ namespace ft
 		/********************************************************************************************************************************/
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-			map&	operator[](const key_type& key)
-			{
-				return (*)
-			}
+			// map&	operator[](const key_type& key)
+			// {
+			// 	return (*)
+			// }
 			
-			map&	&at[](const key_type& key)
-			{
-				iterator	it = this->find(key);
-				return (*)
-			}
+			// map&	&at[](const key_type& key)
+			// {
+			// 	iterator	it = this->find(key);
+			// 	return (*)
+			// }
 
-			map&	operator[](const key_type& key)
-			{
-				return (*)
-			}
+			// map&	operator[](const key_type& key)
+			// {
+			// 	return (*)
+			// }
 
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/********************************************************************************************************************************/

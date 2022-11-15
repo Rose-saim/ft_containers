@@ -1,22 +1,23 @@
-SRCS = main.cpp
-OBJS = $(SRCS:.cpp=.o)
+SRCS			= main.cpp
+OBJS			= $(SRCS:.cpp=.o)
 
-CPP	= c++
-RM	= rm -f
-CFLAGS	= -std=c++98 -Wall -Wextra -Werror
+CXX				= c++
+RM				= rm -f
+CXXFLAGS		= -std=c++98 -Wall -Wextra -Werror
 
-NAME = containers
+NAME			= ClapTrap
 
-all: 	$(NAME)
+all:			$(NAME)
 
-$(NAME):	$(OBJS)
-			$(CPP) $(CFLAGS) -o $(NAME) $(OBJS)
+$(NAME):		$(OBJS)
+				$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJS)
 
-clean: 
-	$(RM) $(OBJS)
-fclean: clean
-	$(RM) $(NAME)
+clean:
+				$(RM) $(OBJS)
 
-re: fclean $(NAME)
+fclean:			clean
+				$(RM) $(NAME)
 
-.PHONY: all clean fclean re
+re:				fclean $(NAME)
+
+.PHONY:			all clean fclean re test
