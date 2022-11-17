@@ -5,7 +5,7 @@ CXX				= c++
 RM				= rm -f
 CXXFLAGS		= -std=c++98 -Wall -Wextra -Werror
 
-NAME			= ClapTrap
+NAME			= containers
 
 all:			$(NAME)
 
