@@ -1,5 +1,6 @@
 #include <iostream>
 #include "AVL.hpp"
+#include "AVL_iterator.hpp"
 #include "map.hpp"
 
 bool fncomp (char lhs, char rhs) {return lhs<rhs;}
@@ -32,5 +33,5 @@ struct classcomp {
 
 int main() {
   ft::map<int, int> test;
-  ft::map<int, int>::iterator it_test = test.begin();
+  ft::map<int, int>::iterator it_test;
 }
