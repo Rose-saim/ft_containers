@@ -6,19 +6,19 @@
 
 namespace ft
 {
-	template<class Key, class Value, class Compare, class Alloc = std::allocator< ft::pair<const Key, Value> > >
+	template<class Key, class Value, class Alloc = std::allocator< ft::pair<const Key, Value> > >
 	class AVL_node
 	{
 		public:
-				typedef AVL_node<Key, Value, Compare, Alloc>		node;
+				typedef AVL_node<Key, Value, Alloc>		node;
 				typedef	Key						key_type;
 				typedef	ft::pair<Key, Value>	pair_type;
 				typedef size_t					size_type;
 				typedef	node					*nodePtr;
 				typedef Value					value_type;
 				typedef	Alloc					allocator_type;
-				typedef ft::AVL_node<Key, Value, Compare, Alloc>	iterator;
-				typedef ft::AVL_node<const Key, Value, Compare, Alloc>	const_iterator;
+				typedef ft::AVL_node<Key, Value, Alloc>	iterator;
+				typedef ft::AVL_node<const Key, Value, Alloc>	const_iterator;
 				size_t					_height;
 				pair_type				_data;
 				nodePtr					_begin;
@@ -145,17 +145,19 @@ namespace ft
 
 namespace ft
 {
-template<class Key, class Value, class Compare, class Alloc = std::allocator< ft::pair<const Key, Value> > >
+template <class T, class AVL>
+// template<class Key, class Value, class class Alloc = std::allocator< ft::pair<const Key, Value> > >
 class AVL_iterator
 {
 	private:
-		typedef ft::AVL_node<Key, Value, Compare, Alloc>	node;
-		typedef node										*nodePtr;
+		typedef ft::AVL_node<T, AVL>	*nodePtr;
+		// typedef AVL	*nodePtr;
 	public:
-		nodePtr	*_root;
-		AVL_iterator();
-		AVL_iterator(nodePtr root, nodePtr pos);
-		~AVL_iterator();
+		nodePtr	_root;
+		ft::pair<nodePtr, bool> val;
+		AVL_iterator(): _root(NULL){};
+		AVL_iterator(nodePtr $root, nodePtr $pos):  _root($root), val(ft::make_pair($pos, false)){};
+		~AVL_iterator(){};
 };
 
 }

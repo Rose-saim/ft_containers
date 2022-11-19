@@ -42,11 +42,12 @@ namespace ft
 			typedef	typename allocator_type::const_pointer							const_pointer;
 			typedef	typename ft::AVL<Key, T, Compare, Allocator>::iterator				iterator;
 			// typedef	typename ft::AVL<const Key, T, Compare, Allocator>::const_iterator	const_iterator;
-		private:
+		// private:
 				key_compare		_compare;
 				allocator_type	_alloc;
 				size_type		_size;
-				iterator			*_root;
+				ft::AVL<Key, T, Compare, Allocator>		_root;
+				ft::AVL_node<Key, T>		node;
 				iterator			*_end;
 				iterator			*_rend;
 		public:
@@ -57,7 +58,7 @@ namespace ft
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 			explicit map( const key_compare &cmp = key_compare(), const Allocator &alloc = Allocator() ):
-				_compare(cmp), _alloc(alloc), _size(0), _root(NULL), _end(NULL), _rend(NULL)
+				_compare(cmp), _alloc(alloc), _size(0), _end(NULL), _rend(NULL)
 			{
 				std::cout << "Construct map" << std::endl;
 			}
@@ -94,7 +95,7 @@ namespace ft
 		/********************************************************************************************************************************/
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		iterator	begin() {return *_root;}
+		iterator	begin() {return _root.begin();}
 		// iterator		begin() {return iterator(this->parent);}
 		// const_iterator	end() {return const_iterator(this->parent);}
 		iterator		end() {return TreeMaximum(this);}

@@ -1,5 +1,6 @@
 #include <iostream>
 #include "AVL.hpp"
+#include <map>
 #include "AVL_iterator.hpp"
 #include "map.hpp"
 
@@ -33,5 +34,8 @@ struct classcomp {
 
 int main() {
   ft::map<int, int> test;
-  ft::map<int, int>::iterator it_test;
+  ft::pair<int, int> key(1,1);
+  test._root._root = test._root._root->insertNode(&(test.node), key);
+  ft::map<int, int>::iterator it_test = test.begin();
+  std::cout << it_test.val.first << std::endl;
 }
