@@ -47,8 +47,8 @@ namespace ft
 				allocator_type							_alloc;
 				size_type								_size;
 				ft::AVL<Key, T, Compare, Allocator>		*_root;
-				iterator								*node;
 				iterator								_node;
+				iterator								*node_ptr;
 		public:
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/********************************************************************************************************************************/
@@ -153,56 +153,13 @@ namespace ft
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		iterator insert (iterator position, const value_type& val)
 		{
-			node = &position;
-			// if (!node)
-			// {
-				node = position.newNode(val);
-				position = *node;
-				std::cout << "NODE: "<< position.key()  << std::endl;			
-				std::cout << "NODE: "<< node->key()  << std::endl;			
-				return *node;
-			// }
-			// if (key.second < node->key())
-			// {
-			// 	node->left = insertNode(node->left, key);
-			// }
-			// else if (key.second > node->key())
-			// {
-			// 	node->right = insertNode(node->right, key);
-			// }
-			// else 
-			// 	return node;
-
-			// node->_height = 1 + node->max(node->height(node->left), node->height(node->right));
-			// int	balanceFactor = getBalanceFactor(node);
-			// if (balanceFactor > 1)
-			// {
-			// 	if (key.second < node->left->key())
-			// 		return node->rightRotate(node);
-			// 	else if (key.second > node->left->key())
-			// 	{
-			// 		node->left = node->leftRotate(node->left);
-			// 		return node->rightRotate(node);	
-			// 	}
-			// }
-			// if (balanceFactor < -1)
-			// {
-			// 	if (key.second > node->right->key())
-			// 		return node->leftRotate(node);
-			// 	else if (key.second < node->right->key())
-			// 	{
-			// 		node->right = node->rightRotate(node->right);
-			// 		return node->leftRotate(node);	
-			// 	}
-			// }
-			// return node;
-			// node = this->_root->insertNode(&position, val);
-			// _node =*( this->_root->insertNode(&position, val));
-			// std::cout << "NODE: "<< node->key()  << std::endl;
-			// std::cout << "NODE: "<< _node.key()  << std::endl;
-			// // _node = position;
-			// // _node.setBegin(true);
-			// return _node;
+			node = this->_root->insertNode(&position, val);
+			_node =*( this->_root->insertNode(&position, val));
+			std::cout << "NODE: "<< node->key()  << std::endl;
+			std::cout << "NODE: "<< _node.key()  << std::endl;
+			node_ptr = &position;
+			// _node.setBegin(true);
+			return _node;
 		}
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/********************************************************************************************************************************/

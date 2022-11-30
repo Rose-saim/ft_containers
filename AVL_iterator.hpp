@@ -30,6 +30,17 @@ namespace ft
 			AVL_node(pair_type key): _height(1), _data(key), left(NULL), right(NULL), name("OUI"), _begin(false){};
 			AVL_node(nodePtr &src){*this = src;}
 			~AVL_node(){std::cout << "destructor AVLnode" << std::endl;}
+			AVL_node &operator=(AVL_node const &src)
+			{
+				if (src != *this)
+				{
+					this->left = src.left;
+					this->right = src.right;
+					this->_data = src._data;
+					this->_height = src._height;
+				}
+				return (*this);
+			}
 			bool	getBegin()
 			{
 				return _begin;
