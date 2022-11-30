@@ -14,29 +14,71 @@ class AVL
 {
 	// private:
 	public:
-		typedef	Alloc 									allocator_type;
-		typedef ft::AVL_iterator<Key, Value>	iterator;
-		typedef ft::AVL_node<Key, Value>	node;
-		node	*_root;
-		AVL(): _root(NULL)
+		typedef	Key										key_type;
+		typedef	ft::pair<Key, Value>					pair_type;
+		typedef size_t									size_type;
+		typedef Value									value_type;
+		typedef	Alloc									allocator_type;
+		typedef ft::AVL_node<Key, Value, Alloc>			iterator;
+		typedef ft::AVL_node<const Key, Value, Alloc>	const_iterator;
+		size_t					_height;
+		pair_type				_data;
+		iterator				_node;
+		AVL(): _height(1), _data(ft::make_pair(0,0)){};
+		~AVL(){
+			std::cout << "Destructor AVL" << std::endl;
+		};
+		
+		int	getBalanceFactor(iterator *N)
 		{
-			std::cout << "okok" << std::endl;
+			if (!N)
+				return 0;
+			return (N->height(N->left) - N->height(N->right));
 		}
-		~AVL(){};
-		iterator	begin() {return (iterator(_root, MinValue(_root)));}
 
-	node *MinValue(node *node) const
-	{
-		while (node && node->left != NULL)
-			node = node->left;
-		return node;
-	}
-	node *MaxValue(node *node)
-	{
-		while (node && node->right != NULL)
-			node = node->right;
-		return node;
-	}
+		iterator	*insertNode(iterator *node, pair_type key)
+		{
+			if (!node)
+			{
+				node = node->newNode(key);
+				std::cout << "NODE: "<< node->key()  << std::endl;			
+				return node;
+			}
+			if (key.second < node->key())
+			{
+				node->left = insertNode(node->left, key);
+			}
+			else if (key.second > node->key())
+			{
+				node->right = insertNode(node->right, key);
+			}
+			else 
+				return node;
+
+			node->_height = 1 + node->max(node->height(node->left), node->height(node->right));
+			int	balanceFactor = getBalanceFactor(node);
+			if (balanceFactor > 1)
+			{
+				if (key.second < node->left->key())
+					return node->rightRotate(node);
+				else if (key.second > node->left->key())
+				{
+					node->left = node->leftRotate(node->left);
+					return node->rightRotate(node);	
+				}
+			}
+			if (balanceFactor < -1)
+			{
+				if (key.second > node->right->key())
+					return node->leftRotate(node);
+				else if (key.second < node->right->key())
+				{
+					node->right = node->rightRotate(node->right);
+					return node->leftRotate(node);	
+				}
+			}
+			return node;
+		}
 };
 
 

@@ -11,31 +11,47 @@ struct classcomp {
   {return lhs<rhs;}
 };
 
-	// void	printTree(ft::AVL<int, int, std::less<int>, std::allocator< std::pair<const int, int> > >  *root, std::string indent, bool last)
-	// {
-	// 	std::cout << indent;
-	// 		if (last)
-	// 		{
-	// 			std::cout << "R----";
-	// 			indent += "    ";
-	// 		}
-	// 		else
-	// 		{
-	// 			std::cout << "L----";
-	// 			indent += "    ";
-	// 		}
-	// 		// std::cout << "STEP 2" << std::endl;
- 	// 	std::cout << root->key() << std::endl;
-  //   if (root->right)
-	// 	  printTree(root->right, indent, true);
-  //   if (root->left)
-  // 		printTree(root->left, indent, false);
-	// }
+	void	printTree(ft::AVL_node<int, int, std::allocator< ft::pair<const int, int> > >  *root, std::string indent, bool last)
+	{
+		std::cout << indent;
+			if (last)
+			{
+				std::cout << "R----";
+				indent += "    ";
+			}
+			else
+			{
+				std::cout << "L----";
+				indent += "    ";
+			}
+			// std::cout << "STEP 2" << std::endl;
+ 		std::cout << root->key() << std::endl;
+    if (root->right)
+		  printTree(root->right, indent, true);
+    if (root->left)
+  		printTree(root->left, indent, false);
+	}
 
 int main() {
-  ft::map<int, int> test;
-  ft::pair<int, int> key(1,1);
-  test._root._root = test._root._root->insertNode(&(test.node), key);
-  ft::map<int, int>::iterator it_test = test.begin();
-  std::cout << it_test.val.first << std::endl;
-}
+	ft::map<int, int> test;
+	ft::pair<int, int> key(1,1);
+	ft::pair<int, int> key2(2,2);
+	ft::pair<int, int> key3(3,3);
+	ft::pair<int, int> key4(4,4);
+  	ft::map<int, int>::iterator it = test.begin();
+	//insert is wrong
+	test.insert(it, key);
+	test.insert(it, key2);
+  	std::cout << it.key() << std::endl;
+	test.insert(it, key3);
+	test.insert(it, key4);
+//   std::cout << "END: " << it_test._root->key() << std::endl;
+	it = test.begin();
+	for (int i = 0; i < 5; i++)
+	{
+		if (it.right != NULL)
+			std::cout << it.right->key() << std::endl;
+		else
+			std::cout << "No POSSIBLE" << std::endl;
+	}
+} 
