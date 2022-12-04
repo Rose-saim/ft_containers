@@ -6,127 +6,131 @@
 
 namespace ft
 {
-	template<class Key, class Value, class Alloc = std::allocator< ft::pair<const Key, Value> > >
+	template<class Key, class T, class Alloc = std::allocator< ft::pair<Key, T> > >
 	class AVL_node
 	{
 		public:
-				typedef ft::AVL_node<Key, Value, Alloc>	iterator;
-				typedef ft::AVL_node<const Key, Value, Alloc>	const_iterator;
-				typedef	iterator					*nodePtr;
-				typedef	Key						key_type;
-				typedef	ft::pair<Key, Value>	pair_type;
-				typedef size_t					size_type;
-				typedef Value					value_type;
-				typedef	Alloc					allocator_type;
+				typedef	ft::AVL_node<Key, T, Alloc>			*nodePtr;
+				typedef	Key									key_type;
+				typedef	ft::pair<Key, T>					value_type;
+				typedef size_t								size_type;
+				typedef	Alloc								allocator_type;
+
 				size_t					_height;
-				pair_type				_data;
+				value_type				_data;
 				nodePtr					left;
 				nodePtr					right;
-				std::string				name;
 				private:
 					bool					_begin;
 		public:
-			AVL_node():_height(1), _data(ft::make_pair(0,0)), left(NULL), right(NULL), name("OUI"), _begin(false){};
-			AVL_node(pair_type key): _height(1), _data(key), left(NULL), right(NULL), name("OUI"), _begin(false){};
+			AVL_node():_height(1), _data(ft::make_pair(1, 1)), left(NULL), right(NULL), _begin(false){
+
+					std::cout << "get NODE" << std::endl;
+				if (_data.first == 1)
+					std::cout << "get NODE" << std::endl;
+			};
+			AVL_node(value_type key): _height(1), _data(key), left(NULL), right(NULL), _begin(false){		};
 			AVL_node(nodePtr &src){*this = src;}
-			~AVL_node(){std::cout << "destructor AVLnode" << std::endl;}
+			~AVL_node(){}
 			AVL_node &operator=(AVL_node const &src)
 			{
-				if (src != *this)
+				if (this != &src)
 				{
 					this->left = src.left;
 					this->right = src.right;
 					this->_data = src._data;
 					this->_height = src._height;
+					this->parent = src.parent;
+					this->_begin = src._begin;
 				}
 				return (*this);
 			}
-			bool	getBegin()
+			nodePtr MaxV(nodePtr ptr)
 			{
-				return _begin;
-			}
-			void	setBegin(bool value)
-			{
-				_begin = value;
-			}
-			int	height(nodePtr N)
-			{
-				if (!N)
-					return 0;
-				return N->_height;
-			}
-			const key_type& key() const
-			{
-				return this->_data.second;
-			}
-
-			iterator *MaxValue()
-			{
-				iterator *it = this;
+				nodePtr it = ptr;
 				while (it && it->right != NULL)
 					it = it->right;
 				return it;
 			}
-			iterator *MinValue()
+			nodePtr MinV(nodePtr ptr)
 			{
-				iterator *it = this;
-			  	while (it && it->left != NULL)
-				{
+				nodePtr it = ptr;
+				while (it && it->left != NULL)
 					it = it->left;
-				}
 				return it;
 			}
-			int max(int a, int b) {
-			return (a > b) ? a : b;
-			}
-
-			// New node creation
-			nodePtr newNode(pair_type key) 
+			key_type&	getData() { 
+				return _data.first;}
+			bool	getBegin() {return _begin;}
+			void	setBegin(bool value)
 			{
-				nodePtr	node = new AVL_node(key);
-				return (node);
+				_begin = value;
 			}
-
-			nodePtr	rightRotate(nodePtr y)
+			void	setData(value_type value)
 			{
-				nodePtr N1 = y->left;
-				nodePtr N2 = N1->right;
-				N1->right = y;
-				y->left = N2;
-				y->_height = max(height(y->left), height(y->right) + 1);
-				N1->_height = max(height(N1->left), height(N1->right) + 1);
-				return N1;
+				_data = value;
 			}
-			nodePtr	leftRotate(nodePtr y)
-			{
-				nodePtr N1 = y->right;
-				nodePtr N2 = N1->left;
-				N1->left = y;
-				y->right = N2;
-				y->_height = max(height(y->left), height(y->right) + 1);
-				N1->_height = max(height(N1->left), height(N1->right) + 1);
-				return N1;
-			}
-
-
 	};
 }
 
 
 namespace ft
 {
-template <class T, class AVL>
+template <class Key, class T, class AVL_node>
 class AVL_iterator
 {
-	private:
-		typedef ft::AVL_node<T, AVL>	*nodePtr;
-		// typedef AVL	*nodePtr;
 	public:
-		nodePtr	_root;
-		ft::pair<nodePtr, bool> val;
-		AVL_iterator(): _root(NULL){};
-		AVL_iterator(nodePtr $root, nodePtr $pos):  _root($root), val(ft::make_pair($pos, false)){};
+		typedef Key								key_type;
+		typedef AVL_node						Node;
+		typedef Node							*nodePtr;
+		typedef AVL_iterator<Key, T, AVL_node>	iterator;
+		typedef	ft::pair<nodePtr, bool>			Pair;
+	// private:
+		nodePtr					_root;
+		Pair				 	val;
+		#define	val_ptr val.first
+		#define	val_nil val.second
+		AVL_iterator(): _root(NULL), val(ft::make_pair(NULL, false)){
+			std::cout << "begin1" << std::endl;
+		};
+		AVL_iterator(nodePtr $root, nodePtr $pos, bool nil): _root($root), val(ft::make_pair($pos, nil)){
+			std::cout << "begin2" << std::endl;
+		};
+		// AVL_iterator(AVL_iterator& src): {this = src;};
 		~AVL_iterator(){};
+
+		AVL_iterator& operator=(const AVL_iterator& src)
+		{
+			if (this != &src)
+			{
+				val = ft::make_pair(src.val_ptr, src.val_nil);
+				_root = src._root;
+			}
+			return *this;
+		}
+
+		// AVL_iterator& operator++(void)
+		// {
+		// 	if (val.second)
+		// 	{
+		// 		val.second = false;
+		// 		return (*this);
+		// 	}
+		// 	if (val.second == _root->MaxV(_root))
+		// 	{
+		// 		val.second = NULL;
+		// 		val.second = true;
+		// 		return (*this);
+		// 	}
+		// 	return *this;
+		// }
+		// AVL_iterator& operator--(void)
+		// {
+		// 	if (_root->left)
+		// 		_root = _root->left;
+		// 	return *this;
+		// }
+
 };
 
 }

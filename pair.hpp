@@ -20,19 +20,18 @@ namespace ft
 			pair (const first_type& a, const second_type& b): first(a), second(b){}
 			pair& operator= (const pair& src)
 			{
-				if (*this == src)
+				if (this == &src)
+				{
 					return (*this);
-				first = src.first;
+				}
 				second = src.second;
+				this->first = src.first;
 				return (*this);
 			}
 	};
 
 	template<class T1, class T2>
-	pair<T1,T2>	make_pair (T1 k, T2 v)
-	{
-		return (pair<T1, T2>(k, v));
-	}
+	pair<T1,T2>	make_pair (T1 k, T2 v) {return (pair<T1, T2>(k, v));}
 
 	///////////////////////     Non-member function overloads      ////////////////////////
 

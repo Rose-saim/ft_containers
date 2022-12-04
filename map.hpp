@@ -42,13 +42,14 @@ namespace ft
 			typedef	typename allocator_type::const_pointer								const_pointer;
 			typedef	typename ft::AVL<Key, T, Compare, Allocator>::iterator				iterator;
 			typedef	typename ft::AVL<const Key, T, Compare, Allocator>::const_iterator	const_iterator;
+			typedef typename ft::AVL_node<Key, T, Allocator>							*nodePtr;
 		// private:
 				key_compare								_compare;
 				allocator_type							_alloc;
 				size_type								_size;
-				ft::AVL<Key, T, Compare, Allocator>		*_root;
-				iterator								_node;
-				iterator								*node_ptr;
+				ft::AVL<Key, T, Compare, Allocator>		tree;
+				nodePtr									node_ptr;
+				iterator								*_ite;
 		public:
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/********************************************************************************************************************************/
@@ -57,7 +58,7 @@ namespace ft
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 			explicit map(const key_compare &cmp = key_compare(), const Allocator &alloc = allocator_type()):
-				 _compare(cmp), _alloc(alloc), _size(0), _root(NULL)
+				 _compare(cmp), _alloc(alloc), _size(0), node_ptr(NULL)
 			{
 				std::cout << "Construct map" << std::endl;
 			}
@@ -83,8 +84,8 @@ namespace ft
 				{
 					this->_alloc = other._alloc;
 					this->_size = other._size;
-					this->_root = other._root;
-					this->_node = other._node;
+					this->tree = other.tree;
+					this->_ite = other._ite;
 				}
 				return (*this);
 			}
@@ -95,10 +96,10 @@ namespace ft
 		/********************************************************************************************************************************/
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		iterator		begin() {iterator *it = _node.MinValue(); return *it;}
-		const_iterator	begin()const {const_iterator *it = _node.MinValue();return *it;}
-		iterator		end() {iterator *it = _node.MaxValue();return *it;}
-		const_iterator	end()const {iterator *it = _node.MaxValue();return *it;}
+		iterator		begin() {return tree.begin();}
+		const_iterator	begin()const {return tree.begin();}
+		iterator		end() {return tree.end();}
+		const_iterator	end()const {return tree.end();}
 		// iterator		rbegin() {return iterator(this->parent);}
 		// iterator		rend() {return TreeMaximum(this);}
 
@@ -135,14 +136,15 @@ namespace ft
 			// 	return (*)
 			// }
 			
-			// map&	&at[](const key_type& key)
-			// {
-			// 	iterator	it = this->find(key);
-			// 	return (*)
-			// }
 
 			// map&	operator[](const key_type& key)
 			// {
+			// 	return (*)
+			// }
+
+			// map&	&at[](const key_type& key)
+			// {
+			// 	iterator	it = this->find(key);
 			// 	return (*)
 			// }
 
@@ -151,38 +153,97 @@ namespace ft
 		/************************************************************MODIFIERS***********************************************************/
 		/********************************************************************************************************************************/
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		iterator insert (iterator position, const value_type& val)
+		pair<iterator,bool> insert(const value_type& val)
 		{
-			node = this->_root->insertNode(&position, val);
-			_node =*( this->_root->insertNode(&position, val));
-			std::cout << "NODE: "<< node->key()  << std::endl;
-			std::cout << "NODE: "<< _node.key()  << std::endl;
-			node_ptr = &position;
-			// _node.setBegin(true);
-			return _node;
+			nodePtr	o_node = tree.search(val);
+			(void)o_node;
+			if (tree.ite_ptr)
+			{
+				std::cout << "===============================!" << std::endl;
+				iterator pos(tree._node, tree.insert(val), false);
+				std::cout << "===============================!" << std::endl;
+				std::cout << "HERE!" << std::endl;
+				// ft::pair<iterator, bool> value_1(ft::make_pair(pos, false), false);
+				// std::cout << "===============================!" << std::endl;
+				// std::cout << "HERE!" << std::endl;
+		  		// return(value_1);
+			}
+			ft::pair<iterator, bool> value_2 = ft::make_pair(iterator(tree._node, tree.insert(val), false), true);
+			std::allocator<iterator> _loc;
+		  	tree.ite_ptr = _loc.allocate(1);
+		  	_ite = _loc.allocate(1);
+			tree.ite_ptr->_root = tree._node;
+			_ite->_root = tree._node;
+		  	return(value_2);
 		}
+		template <class InputIterator> 
+		void insert (InputIterator first, InputIterator last)
+		{
+			while ( (first != last))
+			{
+				insert(*first);
+				++first;
+			}
+			
+		};
+		iterator insert(iterator position, const value_type& val)
+		{
+			(void)position;
+				std::cout << "I'm here3 !" << std::endl;
+			insert(val);
+				std::cout << "I'm here3 !" << std::endl;
+			std::cout << "NODE::" << this->tree._node->getData() << std::endl;
+  			return (*_ite);
+		}
+
+		void erase (iterator position);
+		size_type erase (const key_type& k);
+   		void erase (iterator first, iterator last);
+
+		void swap (map& x)
+		{
+			nodePtr			*tmp;
+			size_type		tmpSize;
+			if (x == *this)
+				return ;
+			tmp = x.node_ptr;
+			tmpSize = x._size;
+			x.node_ptr = this->node_ptr;
+			x._size = this->_size;
+			this->_size = tmpSize;
+			this->node_ptr = tmpSize;
+		}
+
+		void clear() {this->erase(begin(), end());}
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/********************************************************************************************************************************/
 		/************************************************************OBSERVERS***********************************************************/
 		/********************************************************************************************************************************/
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-				
+		
+		key_compare key_comp() const;
+		// value_compare value_comp() const;
+		
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/********************************************************************************************************************************/
 		/************************************************************OPERATIONS**********************************************************/
 		/********************************************************************************************************************************/
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		
+		iterator find (const key_type& k);
+		const_iterator find (const key_type& k) const;
+		size_type count (const key_type& k) const;
+		iterator lower_bound (const key_type& k);
+		const_iterator lower_bound (const key_type& k) const;
+		iterator upper_bound (const key_type& k);
+		const_iterator upper_bound (const key_type& k) const;
+		pair<const_iterator,const_iterator> equal_range (const key_type& k) const;
+		pair<iterator,iterator>             equal_range (const key_type& k);
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/********************************************************************************************************************************/
 		/************************************************************ALLOCATOR**********************************************************/
 		/********************************************************************************************************************************/
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-
-
-
-
+			allocator_type get_allocator() const;
 			private:
 				key_compare	_comparator;
 				allocator_type	_valueAlloc;
