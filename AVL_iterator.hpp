@@ -93,8 +93,10 @@ class AVL_iterator
 		AVL_iterator(): _root(NULL), val(ft::make_pair(NULL, false)){
 			std::cout << "begin1" << std::endl;
 		};
-		AVL_iterator(nodePtr $root, nodePtr $pos, bool nil): _root($root), val(ft::make_pair($pos, nil)){
+		AVL_iterator(nodePtr $root, nodePtr $pos, bool nil){
 			std::cout << "begin2" << std::endl;
+			 _root($root); 
+			 val(ft::make_pair($pos, nil));
 		};
 		// AVL_iterator(AVL_iterator& src): {this = src;};
 		~AVL_iterator(){};
