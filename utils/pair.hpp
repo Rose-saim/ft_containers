@@ -6,18 +6,19 @@ namespace ft
 	template	<class T1, class T2>
 	struct pair
 	{
-		public:
 			typedef	T1	first_type;
 			typedef	T2	second_type;
+
 			first_type	first;
 			second_type	second;
-
 			//Constructor
-			
-			pair(): first(), second(){}
-			template<class U, class V>
-			pair (const pair<U,V>& src): first(src.first), second(src.second){}
+			pair(void): first(first_type()), second(second_type()) {}
+			~pair(){}
 			pair (const first_type& a, const second_type& b): first(a), second(b){}
+
+			template<class U, class V>
+			pair (const pair<U,V> &pr): first(pr.first), second(pr.second){}
+
 			pair& operator= (const pair& src)
 			{
 				if (this == &src)
@@ -25,7 +26,7 @@ namespace ft
 					return (*this);
 				}
 				second = src.second;
-				this->first = src.first;
+				first = src.first;
 				return (*this);
 			}
 	};
