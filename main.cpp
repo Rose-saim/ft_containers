@@ -15,18 +15,24 @@ int main() {
 	it = test.begin();
 	it = test.insert(it, key2);
 	it = test.insert(it, key);
-
-	//insert is wrong
+	std::cout << "test: " << (it)->first << std::endl;
+	// //insert is wrong
 	it = test.insert(it, key4);
 	it = test.insert(it, key3);
-	std::cout << "test: " << (it)->first << std::endl;
-	it++;
-	std::cout << "test: " << it->first << std::endl;
-	it--;
-	std::cout << "test: " << (*it).first << std::endl;
+	// it++;
 	std::cout << "test: " << (it)->first << std::endl;
 	test.erase(it);
-	std::cout << "test: " << it->first << std::endl;
-	it++;
-	it++;
+	test.erase(it);
+	test.erase(it);
+	test.erase(it);
+	
+	// it++;
+	// std::cout << "test: " << it->first << std::endl;
+	// it--;
+	// std::cout << "test: " << (*it).first << std::endl;
+	// std::cout << "test: " << (it)->first << std::endl;
+	// test.erase(it);
+	// std::cout << "test: " << it->first << std::endl;
+	// it++;
+	// it++;
 } 

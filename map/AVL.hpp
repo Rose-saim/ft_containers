@@ -5,6 +5,7 @@
 # include "AVL_iterator.hpp"
 # include "AVL_iterator_rev.hpp"
 # include "AVL_Node.hpp"
+# include "stdlib.h"
 
 namespace ft
 {
@@ -51,9 +52,12 @@ namespace ft
 				return _node->MinV(ptr);
 			}
 			// New node creation
-			Node *newNode(value_type key) 
+			Node *newNode(Node* node, value_type key) 
 			{
-				Node	*node = myAlloc.allocate(1);
+				node = new Node;
+				node->right = NULL;
+				node->left = NULL;
+				node->parent = NULL;
 				node->setData(key);
 				return (node);
 			}
@@ -68,14 +72,17 @@ namespace ft
 				if (!node)
 				{
 					_size += 1;
-					node = newNode(key);
+					// __node->right = NULL;
+					// __node->left = NULL;
+					// __node->parent = NULL;
+					node = newNode(node, key);
 					node->parent = parent;
 					return node;
 				}
 				if (key.first < node->getData().first)
 				{
 					node->left = insertNode(node->left, key, node);
-					node->left->parent = node;
+					// node->left->parent = node;
 				}
 				else if (key.first > node->getData().first)
 				{
@@ -111,12 +118,7 @@ namespace ft
 			}
 //========================================================================================================================
 			Node* deleteNode(Node *position) {
-				std::cout << "node  : " <<position->getData().first << std::endl;
 				position = deleteAt(_node, position->_data);
-				std::cout << "node  : " <<position->getData().first << std::endl;
-				std::cout << "node  : " <<_node->getData().first << std::endl;
-				std::cout << "node R: " <<_node->right->getData().first << std::endl;
-				std::cout << "node L: " <<_node->left->getData().first << std::endl;
 				return (position);
 			}
 			Node *deleteAt(Node *root, value_type key) {

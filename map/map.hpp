@@ -68,7 +68,7 @@ namespace ft
 					const Allocator &alloc = Allocator() ):
 				_compare(cmp), _valueAlloc(alloc)
 			{
-				this->insert(first, last);
+				insert(first, last);
 			}
 			map( const map& other )
 			{
@@ -76,7 +76,6 @@ namespace ft
 			}
 			~map()
 			{
-				std::cout << "Destruct map" << std::endl;
 			}
 
 			map&	operator=(const map& other)
@@ -187,7 +186,7 @@ namespace ft
 		void erase (iterator position)
 		{
 			position._root = tree.deleteNode(position._root);
-			std::cout << position->first << std::endl;
+			
 		}
 		size_type erase (const key_type& k)
 		{
