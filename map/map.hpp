@@ -76,6 +76,11 @@ namespace ft
 			}
 			~map()
 			{
+				if (size() > 0)
+				{
+					erase(begin(), end());
+					erase(node_ptr);
+				}
 			}
 
 			map&	operator=(const map& other)

@@ -72,9 +72,6 @@ namespace ft
 				if (!node)
 				{
 					_size += 1;
-					// __node->right = NULL;
-					// __node->left = NULL;
-					// __node->parent = NULL;
 					node = newNode(node, key);
 					node->parent = parent;
 					return node;
