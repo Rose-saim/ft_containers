@@ -111,7 +111,7 @@ namespace ft
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		iterator				begin() {return (tree.begin());}
-		// const_iterator			begin()const {return (tree.begin());} 	
+		const_iterator			begin()const {return (c_tree.begin());} 	
 		iterator				end() {return (tree.end());}
 		const_iterator			end()const {return (c_tree.end());}
 		iterator_rev			rbegin() {return (tree.rbegin());}

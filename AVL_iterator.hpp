@@ -98,7 +98,8 @@ class AVL_iterator
 		}
 
 		operator AVL_iterator<const Key, T, AVL_node>()const
-		{ return(AVL_iterator<const Key, T, AVL_node>(_root)); }
+		{ std::cout << "const_iterator" << std::endl;
+			return(AVL_iterator<const Key, T, AVL_node>(_root)); }
 
 		ft::pair<Key, T>&	operator*()const  {	return (_root->getData());}
 		ft::pair<Key, T>*	operator->(void)const  {return (&(operator*()));}
