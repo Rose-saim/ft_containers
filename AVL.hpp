@@ -1,7 +1,7 @@
 #ifndef AVL_HPP
 # define AVL_HPP
 
-# include "../utils/pair.hpp"
+# include "pair.hpp"
 # include "AVL_iterator.hpp"
 # include "AVL_iterator_rev.hpp"
 # include "AVL_Node.hpp"
@@ -26,30 +26,30 @@ namespace ft
 			Compare												_comparator;
 			std::allocator<Node>								myAlloc;
 			std::allocator<iterator>							youAlloc;
-			iterator											*ite_ptr;
 			Node												*_node;
 			size_t												_size;
-			AVL(): _node(), _size(0){
-			};
+			AVL(): _node(), _size(0){};
 			~AVL(){
 			};
 			iterator	begin() {return (iterator(MinValue(_node)));}
-			const_iterator	begin() const{return (iterator(MinValue(_node)));}
 			iterator	end() {return (iterator(MaxValue(_node)));}
-			const_iterator	end() const{return (iterator(MaxValue(_node)));}
+			const_iterator	begin() const{return (const_iterator(MinValue(_node)));}
+			const_iterator	end() const{return (const_iterator(MaxValue(_node)));}
 			
 			iterator_rev	rbegin() {return (iterator_rev(MaxValue(_node)));}
 			const_iterator_rev	rbegin() const{return (iterator_rev(MaxValue(_node)));}
-			iterator_rev	rend() {return (iterator_rev(MinValue(_node)));}
-			const_iterator_rev	rend() const{return (iterator_rev(MinValue(_node)));}
+			iterator_rev	rend() {return (iterator_rev(MinValue()));}
+			const_iterator_rev	rend() const{return (iterator_rev(MinValue()));}
 
-			Node *MaxValue(Node *ptr)
+			Node *MaxValue(Node *ptr) const
 			{
 				return _node->MaxV(ptr);
 			}
-			Node *MinValue(Node *ptr)
+			Node *MinValue(Node *ptr)const
 			{
-				return _node->MinV(ptr);
+			while (ptr && ptr->left)
+				ptr = ptr->left;
+			return ptr;
 			}
 			// New node creation
 			Node *newNode(Node* node, value_type key) 
@@ -62,8 +62,8 @@ namespace ft
 				return (node);
 			}
 
-			Node* insert(const value_type& $pair){
-			_node = insertNode(_node, $pair);
+			Node* insert(const value_type& _pair){
+			_node = insertNode(_node, _pair);
 			return(_node);
 			}
 

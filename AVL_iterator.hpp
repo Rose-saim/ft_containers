@@ -14,18 +14,15 @@ class AVL_iterator
 		typedef AVL_iterator<Key, T, AVL_node>	iterator;
 		nodePtr									_root;
 		std::allocator<Node> alloc;
-		AVL_iterator(){
-			// _root = alloc.allocate(1);
-			// *_root = ft::make_pair(1, 1);
+		AVL_iterator(): _root(NULL){
+		}; 
+		AVL_iterator(nodePtr data){
+		
+			_root = data;
 		};
-		AVL_iterator(nodePtr $root): _root($root){
-		};
-		// AVL_iterator(iterator& src) {
-		// 	(void)src;
-		// }
+		AVL_iterator(const iterator& src): _root(src._root){
+		}
 		~AVL_iterator(){
-			// if (_root)
-			// 	alloc.deallocate(_root,  1);
 		};
 		iterator& operator=(const iterator& src)
 		{
@@ -99,6 +96,10 @@ class AVL_iterator
 			operator--();
 			return (tmp);
 		}
+
+		operator AVL_iterator<const Key, T, AVL_node>()const
+		{ return(AVL_iterator<const Key, T, AVL_node>(_root)); }
+
 		ft::pair<Key, T>&	operator*()const  {	return (_root->getData());}
 		ft::pair<Key, T>*	operator->(void)const  {return (&(operator*()));}
 		nodePtr	getPtr()const {return (_root);}

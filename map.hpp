@@ -37,6 +37,15 @@ namespace ft
 			typedef	ft::pair<const Key, T>			 										value_type;
 			typedef	Allocator																allocator_type;
 			typedef	Compare																	key_compare;
+			class value_compare : public binary_function<value_type, value_type, bool>
+			{
+				friend class map;
+				protected:
+				Compare	comp;
+				value_compare(Compare c): comp(c){}
+				public:
+				bool operator()(const value_type& x, const value_type& y) const {	return (comp(x.first, y.first)); }
+			};
 			typedef typename allocator_type::const_reference								const_reference;
 			typedef	typename allocator_type::reference										reference;
 			typedef	typename allocator_type::const_pointer									const_pointer;
@@ -47,11 +56,12 @@ namespace ft
 			typedef	typename ft::AVL<Key, T, Compare, Allocator>::iterator_rev				iterator_rev;
 			typedef typename ft::AVL_node<Key, T, Allocator>								*nodePtr;
 		// private:
-				key_compare								_compare;
-				allocator_type							_alloc;
-				ft::AVL<Key, T, Compare, Allocator>		tree;
-				nodePtr									node_ptr;
-				iterator								*_ite;
+				key_compare									_compare;
+				allocator_type								_alloc;
+				ft::AVL<Key, T, Compare, Allocator>			tree;
+				ft::AVL<const Key, T, Compare, Allocator>	c_tree;
+				nodePtr										node_ptr;
+				iterator									*_ite;
 		public:
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/********************************************************************************************************************************/
@@ -101,9 +111,9 @@ namespace ft
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		iterator				begin() {return (tree.begin());}
-		const_iterator			begin()const {return (tree.begin());}
+		const_iterator			begin()const {return (tree.begin());} 	
 		iterator				end() {return (tree.end());}
-		const_iterator			end()const {return (tree.end());}
+		const_iterator			end()const {return (c_tree.end());}
 		iterator_rev			rbegin() {return (tree.rbegin());}
 		const_iterator_rev		rbegin()const {return (tree.rbegin());}
 		iterator_rev			rend() {return (tree.rend());}
@@ -115,19 +125,19 @@ namespace ft
 		/********************************************************************************************************************************/
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		bool	empty(void)
+		bool	empty(void) const
 		{
 			if (size() == 0)
 				return 1;
 			return 0;	
 		}
 
-		size_type	size()
+		size_type	size() const
 		{
 			return (tree._size);
 		}
 
-		size_type	max_size()
+		size_type	max_size() const
 		{
 			return (_alloc.max_size());
 		}
@@ -213,16 +223,16 @@ namespace ft
 
 		void swap (map& x)
 		{
-			nodePtr			*tmp;
+			nodePtr			tmp;
 			size_type		tmpSize;
-			if (x == *this)
+			if (&x == this)
 				return ;
 			tmp = x.node_ptr;
-			tmpSize = x._size;
+			tmpSize = x.tree._size;
 			x.node_ptr = this->node_ptr;
-			x._size = this->_size;
-			this->_size = tmpSize;
-			this->node_ptr = tmpSize;
+			x.tree._size = this->tree._size;
+			this->tree._size = tmpSize;
+			this->node_ptr = tmp;
 		}
 
 		void clear() {this->erase(begin(), end());}
@@ -234,7 +244,9 @@ namespace ft
 		
 		key_compare key_comp() const
 		{ return (key_compare());}
-		// value_compare value_comp() const;
+
+		value_compare value_comp() const
+		{ return (value_compare(key_compare()));}
 		
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/********************************************************************************************************************************/
@@ -246,7 +258,7 @@ namespace ft
 			ft::pair<Key, T> toSearch(ft::make_pair(k, mapped_type()));
 			nodePtr	toFind = tree.search(toSearch);
 			if (toFind)
-				return (iterator(tree._node, toFind, false));
+				return (iterator(toFind));
 			else
 				return (end());
 		}
@@ -255,7 +267,7 @@ namespace ft
 			ft::pair<Key, T> toSearch(ft::make_pair(k, mapped_type()));
 			nodePtr	toFind = tree.search(toSearch);
 			if (toFind)
-				return (const_iterator(tree._node, toFind, false));
+				return (const_iterator(toFind));
 			else
 				return (end());
 		}
@@ -268,30 +280,24 @@ namespace ft
 		
 		iterator lower_bound (const key_type& k)
 		{
-			iterator	it = begin();
-			while (it != it->end())
+			iterator	beg = begin();
+			iterator	end = this->end();
+			while (beg != end)
 			{
-				if (!_comparator(it->first, k))
+				if (!_comparator(beg->first, k))
 					break ;
-				it++;
+				beg++;
 			}
-			return (it);
+			return (beg);
 		}
 		const_iterator lower_bound (const key_type& k) const
 		{
-			const_iterator	it = begin();
-			while (it != it->end())
-			{
-				if (!_comparator(it->first, k))
-					break ;
-				it++;
-			}
-			return (it);
+			return (const_iterator(this->lower_bound(k)));
 		}
 		iterator upper_bound (const key_type& k)
 		{
 			iterator	beg = begin();
-			iterator	end = end();
+			iterator	end = this->end();
 			while (beg != end)
 			{
 				if (_comparator(k, (*beg).first))

@@ -18,7 +18,7 @@ class AVL_iterator_rev
 		nodePtr					_root;
 		AVL_iterator_rev(): _root(NULL){
 		};
-		AVL_iterator_rev(nodePtr $root): _root($root){
+		AVL_iterator_rev(nodePtr __root): _root(__root){
 		};
 		AVL_iterator_rev(AVL_iterator_rev& src): _root(src._root){};
 		~AVL_iterator_rev(){};
@@ -73,7 +73,7 @@ class AVL_iterator_rev
 
 		AVL_iterator_rev& operator--(void)
 		{
-        	if (_root == _root->maxV(_root))
+        	if (_root == _root->MaxV(_root))
 			{
 				_root = NULL;
 				return (*this);				

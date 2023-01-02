@@ -361,7 +361,14 @@ class vector
 			pop_back();
 	}
 
+		bool			___INSERT__DEFAULT__;	
+	private:	
+		size_t			pos;
+		allocator_type	_Base;
+		size_type		_capacity;
+		pointer			_array;
 
+};
 	template <class T, class Alloc>
 	bool operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
 	{
@@ -398,13 +405,5 @@ class vector
 		return !(lhs < rhs);
 	}
 
-	private:	
-		bool			___INSERT__DEFAULT__;	
-		size_t			pos;
-		allocator_type	_Base;
-		size_type		_capacity;
-		pointer			_array;
-
-};
 }
 #endif
